@@ -1,8 +1,8 @@
-System Design Project
+# System Design Project
 
-Team 3 -- Legoal
+*Team 3 -- Legoal*
 
-Members
+## Members
 
 * Fraser Cormack
 * Daniel Holden
@@ -17,14 +17,14 @@ Members
 
 Tutor: Joseph Henry
 
-Installation Requirements:
+## Installation Requirements:
 
 You will need the ICE framework installed (http://www.zeroc.com/ice.html) - if
 you're doing SDP there should be a guide to doing this up on the forums. You
 will also need LeJOS (http://lejos.sourceforge.net/) installed - again, there
 should be a guide on the forums. Everything else should be here.
 
-Notes:
+## Notes:
 
 * Be aware that our code is not perfect - far from it. We suggest that you do
   not follow our Strategy code, as it doesn't really work too tell, although
