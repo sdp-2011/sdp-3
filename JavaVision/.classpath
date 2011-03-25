@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="Inverted/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s08/s0840449/Documents/Coursework/SDP/src/Topics"/>
+	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s08/s0840449/SDP/Ice-3.4.1/lib/Ice.jar"/>
+	<classpathentry kind="lib" path="lib/v4l4j.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

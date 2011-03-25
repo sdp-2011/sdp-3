@@ -1,0 +1,14 @@
+This is just to remind me, cause I keep forgetting.
+
+To run this project, you need the following jars added in eclipse (or on your classpath):
+
+Ice.jar
+v4l4.jar
+jna.jar (?)
+javacv.jar (?)
+
+For the v4l4 jar, you also need to set its native libary location to /usr/lib/jni/.
+
+You also need to add the "Topics" folder - $SDP_HOME/src/Topics as an external folder,
+and you may have to set its native library location to the WorldStateTopic folder within
+that folder (it seems to just... depend.) 
