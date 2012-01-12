@@ -19,7 +19,7 @@ import au.edu.jcu.v4l4j.exceptions.V4L4JException;
  * 
  * @author s0840449
  */
-public class Vision extends WindowAdapter implements Runnable {
+public class Vision extends WindowAdapter {
     
     private VideoDevice videoDev;
     private JLabel label;
@@ -49,7 +49,7 @@ public class Vision extends WindowAdapter implements Runnable {
      * 
      * @throws V4L4JException   If any parameter if invalid.
      */
-    public Vision(String videoDevice, int width, int height, int videoStandard, int channel,
+    public Vision(String videoDevice, int width, int height, int channel, int videoStandard,
             int compressionQuality, WorldState worldState, ThresholdsState thresholdsState,
             PitchConstants pitchConstants) throws V4L4JException {
         
@@ -59,15 +59,8 @@ public class Vision extends WindowAdapter implements Runnable {
         this.pitchConstants = pitchConstants;
         
         /* Initialise the GUI that displays the video feed. */
-        initFrameGrabber(videoDevice, width, height, videoStandard,
-                channel, compressionQuality);
+        initFrameGrabber(videoDevice, width, height, channel, videoStandard, compressionQuality);
         initGUI();
-        
-        /* Start the processing thread. */
-        stop = false;
-        captureThread = new Thread(this, "Capture Thread");
-        captureThread.start();
-        
     }
     
      /**
@@ -76,18 +69,35 @@ public class Vision extends WindowAdapter implements Runnable {
      * @param videoDevice           The video device file to capture from.
      * @param inWidth               The desired capture width.
      * @param inHeight              The desired capture height.
-     * @param videoStandard         The capture standard.
      * @param channel               The capture channel.
+     * @param videoStandard         The capture standard.
      * @param compressionQuality    The JPEG compression quality.
      * 
      * @throws V4L4JException   If any parameter is invalid.
      */
-    private void initFrameGrabber(String videoDevice, int inWidth, int inHeight,
-            int videoStandard, int channel, int compressionQuality) throws V4L4JException {
-        
+    private void initFrameGrabber(String videoDevice, int inWidth, int inHeight, int channel,
+            int compressionQuality) throws V4L4JException {
         videoDev = new VideoDevice(videoDevice);
+
+        DeviceInfo deviceInfo = videoDev.getDeviceInfo();
+        // TODO: Check that deviceInfo has formats first.
+        ImageFormat imageFormat = deviceInfo.getFormatList().getNativeFormat(0);
+
         frameGrabber = videoDev.getJPEGFrameGrabber(inWidth, inHeight, channel, videoStandard,
-                compressionQuality);
+                compressionQuality, videoFormat);
+
+        frameGrabber.setCaptureCallback(new CaptureCallback() {
+            public void exceptionReceived(V4L4JException e) {
+                System.err.println("WARNING: " + e.getMessage());
+            }
+
+            public void nextFrame(VideoFrame frame) {
+                // TODO: Recycle the frame first.
+                long before = System.currentTimeMillis();
+                processAndUpdateImage(frame.getBufferedImage(), before);
+                frame.recycle();
+            }
+        });
         
         frameGrabber.startCapture();
         
@@ -113,63 +123,12 @@ public class Vision extends WindowAdapter implements Runnable {
     }
     
     /**
-     * Implements the capture thread: get a frame from the FrameGrabber, and display it
-     */
-    public void run() {
-        
-        VideoFrame frame;
-        
-        int numFrames = 0;
-        
-        try {
-            
-            //calculateDistortion();
-            
-            while(!stop){
-                
-                /* Used to calculate the FPS. */
-                long before = System.currentTimeMillis();
-                
-                /* Extract information from the current frame and display
-                 * the feed. */
-                frame = frameGrabber.getVideoFrame();
-                processAndUpdateImage(frame.getBufferedImage(), before);
-                frame.recycle();
-                
-                numFrames++;
-                
-            }
-            
-        } catch (V4L4JException e) {
-            System.err.println("Failed to capture image:");
-            e.printStackTrace();
-        }
-        
-    }
-    
-    /**
      * Catches the window closing event, so that we can free up resources
      * before exiting.
      * 
      * @param e         The window closing event.
      */
     public void windowClosing(WindowEvent e) {
-        
-        /* We want to stop the capture thread so we can finish. */
-        if(captureThread.isAlive()){
-            
-            stop = true;
-            
-            try {
-                
-                captureThread.join();
-                
-            } catch (InterruptedException e1) {
-                
-            }
-            
-        }
-
         /* Dispose of the various swing and v4l4j components. */
         frameGrabber.stopCapture();
         videoDev.releaseFrameGrabber();
@@ -177,7 +136,6 @@ public class Vision extends WindowAdapter implements Runnable {
         windowFrame.dispose();   
         
         System.exit(0);
-        
     }
 
     /**

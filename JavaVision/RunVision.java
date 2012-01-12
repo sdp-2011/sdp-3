@@ -35,9 +35,9 @@ public class RunVision {
 		String videoDevice = "/dev/video0";
 		int width = 640;
 		int height = 480;
+		int channel = 0;
 		int videoStandard = V4L4JConstants.STANDARD_PAL;
-		int channel = 2;
-		int compressionQuality = 60;
+		int compressionQuality = 80;
 
 		try {
 			
@@ -50,7 +50,7 @@ public class RunVision {
 			wsI = new WorldStateI(worldState);
 			
 			/* Create a new Vision object to serve the main vision window. */
-			new Vision(videoDevice, width, height, videoStandard, channel,
+			new Vision(videoDevice, width, height, channel, videoStandard,
 					compressionQuality, worldState, thresholdsState, pitchConstants);
 			
 			/* Create the Control GUI for threshold setting/etc. */
