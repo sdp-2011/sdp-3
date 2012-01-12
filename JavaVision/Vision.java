@@ -87,7 +87,7 @@ public class Vision extends WindowAdapter {
         ImageFormat imageFormat = deviceInfo.getFormatList().getNativeFormat(0);
 
         frameGrabber = videoDev.getJPEGFrameGrabber(inWidth, inHeight, channel, videoStandard,
-                compressionQuality, videoFormat);
+                compressionQuality, imageFormat);
 
         frameGrabber.setCaptureCallback(new CaptureCallback() {
             public void exceptionReceived(V4L4JException e) {
