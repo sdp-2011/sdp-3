@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import au.edu.jcu.v4l4j.CaptureCallback;
+import au.edu.jcu.v4l4j.DeviceInfo;
 import au.edu.jcu.v4l4j.FrameGrabber;
+import au.edu.jcu.v4l4j.ImageFormat;
 import au.edu.jcu.v4l4j.VideoDevice;
 import au.edu.jcu.v4l4j.VideoFrame;
 import au.edu.jcu.v4l4j.exceptions.V4L4JException;
@@ -76,7 +79,7 @@ public class Vision extends WindowAdapter {
      * @throws V4L4JException   If any parameter is invalid.
      */
     private void initFrameGrabber(String videoDevice, int inWidth, int inHeight, int channel,
-            int compressionQuality) throws V4L4JException {
+            int videoStandard, int compressionQuality) throws V4L4JException {
         videoDev = new VideoDevice(videoDevice);
 
         DeviceInfo deviceInfo = videoDev.getDeviceInfo();
