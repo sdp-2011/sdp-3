@@ -1,14 +1,11 @@
-This is just to remind me, cause I keep forgetting.
+This the vision system for SDP group 3.
 
-To run this project, you need the following jars added in eclipse (or on your classpath):
+It is currently detached from the ICE communication system. To examine how it
+hooked into ICE, look for the "standalone" git tag and examine the commit prior
+to the tag. Pay close attention to the README there, which explains which ICE
+folders/libraries need to be on the classpath/librarypath. (For a guide to 
+using git tags, http://lmgtfy.com/?q=git+tag).
 
-Ice.jar
-v4l4.jar
-jna.jar (?)
-javacv.jar (?)
+To compile the vision system code, just run './compile.sh'.
 
-For the v4l4 jar, you also need to set its native libary location to /usr/lib/jni/.
-
-You also need to add the "Topics" folder - $SDP_HOME/src/Topics as an external folder,
-and you may have to set its native library location to the WorldStateTopic folder within
-that folder (it seems to just... depend.) 
+To run the visiom system code, run './runVision.sh'.
