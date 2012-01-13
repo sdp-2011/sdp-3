@@ -106,8 +106,8 @@ public class Vision extends WindowAdapter {
         
         /* The actual width and height are slightly wider/taller than
          * the FrameGrabber claims. */
-        width = frameGrabber.getWidth() + 4;
-        height = frameGrabber.getHeight() + 27;
+        width = frameGrabber.getWidth();
+        height = frameGrabber.getHeight();
     }
     
     /** 
